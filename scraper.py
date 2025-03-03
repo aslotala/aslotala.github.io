@@ -1,22 +1,22 @@
-# https://kciebiera.github.io/www-2425/lab1.html
-# https://kciebiera.github.io/www-2425/
-# https://aslotala.github.io/
-# https://www.oldest.org/entertainment/board-games/
+# Useful links:
+# Exercise -   https://kciebiera.github.io/www-2425/lab1.html
+# My website - https://aslotala.github.io/
+# My site -    https://www.oldest.org/entertainment/board-games/
 
 import requests
+from bs4 import BeautifulSoup
+from markdownify import markdownify as md
 
 r = requests.get('https://www.oldest.org/entertainment/board-games/')
+start = '<h3>8. Chess</h3>'
+end = '<p>Although historians aren&#8217;t quite sure how exactly the game was played, Timothy Kendall and R.C. Bell have made their own reconstructions of the game. Kendall and Bell&#8217;s rules are based on pieces of texts mentioning Senet and these rules have been adopted by modern senet players.</p>'
 
-html_doc = r.text
-pocz = 'wpb-content-wrapper'
+html = r.text
+cut_html = r.text.split(start)[1].split(end)[0]
 
-html_doc.split(pocz)
+soup = BeautifulSoup(cut_html, 'html.parser')
 
-from bs4 import BeautifulSoup
-soup = BeautifulSoup(html_doc, 'html.parser')
 
-# elements = soup.find_all(class_='col-md-8 content-holder')
 
-from markdownify import markdownify as md
-print(md('<b>Yay</b> <a href="http://github.com">GitHub</a>', convert=['b']))
+print("end")
 
