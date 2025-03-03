@@ -16,7 +16,27 @@ cut_html = r.text.split(start)[1].split(end)[0]
 
 soup = BeautifulSoup(cut_html, 'html.parser')
 
+# Extract game titles, descriptions, and images
+games = []
+for h3 in soup.find_all('h3'):
+    game_name = h3.get_text(strip=True)
+    description = h3.find_next_sibling('p')
+    image = h3.find_next('img')
 
+    game_info = f"## {game_name}\n"
+    if description:
+        game_info += f"{description.get_text(strip=True)}\n"
+    if image:
+        img_url = image['src']
+        game_info += f"![{game_name}]({img_url})\n"
 
-print("end")
+    games.append(game_info)
 
+# Convert to Markdown
+markdown_content = "# Oldest Board Games\n\n" + "\n\n".join(games)
+
+# Save to README.md
+with open("README.md", "w", encoding="utf-8") as f:
+    f.write(markdown_content)
+
+print("Scraped content saved to README.md")
