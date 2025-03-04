@@ -48,14 +48,27 @@ for h3 in soup.find_all('h3'):
     if description_section:
         game_info += f"{description_section.get_text(strip=True)}\n\n"
     
-    # Process images (but use GitHub instead of downloading)
+    # Process images (download them and save to the local folder)
     image = h3.find_next('img')
     if image and 'src' in image.attrs:
-        img_name = f"{game_name.lower().replace(' ', '_')}.jpg"
-        img_url = f"{GITHUB_IMAGE_URL}{img_name}"  # Reference GitHub image
+        img_url = image.attrs['src']
         
-        # Add image to Markdown without photo source
-        game_info += f"![{game_name}]({img_url})\n\n"
+        # Check if the image URL is a full URL or needs to be prefixed
+        if not img_url.startswith('http'):
+            img_url = 'https://www.oldest.org' + img_url
+        
+        img_name = f"{game_name.lower().replace(' ', '_')}.jpg"
+        img_path = os.path.join(img_folder, img_name)
+        
+        # Download the image and save it locally
+        try:
+            img_data = requests.get(img_url).content
+            with open(img_path, 'wb') as img_file:
+                img_file.write(img_data)
+            # Add image to Markdown
+            game_info += f"![{game_name}]({img_folder}/{img_name})\n\n"
+        except requests.exceptions.RequestException as e:
+            print(f"Error downloading image for {game_name}: {e}")
 
     games.append(game_info)
 
