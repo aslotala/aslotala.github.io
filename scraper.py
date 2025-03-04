@@ -8,6 +8,8 @@ import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify as md
 
+GITHUB_IMAGES_URL = "https://github.com/aslotala/aslotala.github.io/blob/main/photos/"
+
 url = 'https://www.oldest.org/entertainment/board-games/'
 
 r = requests.get(url)
@@ -23,7 +25,6 @@ img_folder = "photos"
 os.makedirs(img_folder, exist_ok=True)
 
 
-# Extract game titles, descriptions, and images
 games = []
 for h3 in soup.find_all('h3'):
     game_name = h3.get_text(strip=True)
@@ -34,19 +35,13 @@ for h3 in soup.find_all('h3'):
     if description:
         game_info += f"{description.get_text(strip=True)}\n"
 
-    # Process images
+    # Process images (but use GitHub instead of downloading)
     if image and 'src' in image.attrs:
-        img_url = image['src']
         img_name = f"{game_name.lower().replace(' ', '_')}.jpg"
-        img_path = os.path.join(img_folder, img_name)
+        img_url = f"{GITHUB_IMAGES_URL}{img_name}"  # Reference GitHub image
 
-        # Download the image
-        img_data = requests.get(img_url).content
-        with open(img_path, "wb") as img_file:
-            img_file.write(img_data)
-
-        # Add local image reference to Markdown
-        game_info += f"![{game_name}](photos/{img_name})\n"
+        # Add image reference to Markdown
+        game_info += f"![{game_name}]({img_url})\n"
 
     games.append(game_info)
 
@@ -57,4 +52,4 @@ markdown_content = "# Oldest Board Games\n\n" + "\n\n".join(games)
 with open("README.md", "w", encoding="utf-8") as f:
     f.write(markdown_content)
 
-print("Scraped content saved to README.md, images downloaded to 'photos/'")
+print("Scraped content saved to README.md with GitHub image references.")
