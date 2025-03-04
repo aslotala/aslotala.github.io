@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify as md
 
-GITHUB_IMAGES_URL = "https://github.com/aslotala/aslotala.github.io/blob/main/photos/"
+GITHUB_IMAGE_URL = "https://github.com/aslotala/aslotala.github.io/blob/main/photos/"
 
 url = 'https://www.oldest.org/entertainment/board-games/'
 
@@ -25,31 +25,40 @@ img_folder = "photos"
 os.makedirs(img_folder, exist_ok=True)
 
 
+# Extract game titles, descriptions, and images
 games = []
 for h3 in soup.find_all('h3'):
     game_name = h3.get_text(strip=True)
     description = h3.find_next_sibling('p')
     image = h3.find_next('img')
 
-    game_info = f"## {game_name}\n"
+    game_info = f"## {game_name}\n\n"
+    
     if description:
-        game_info += f"{description.get_text(strip=True)}\n"
+        game_info += f"{description.get_text(strip=True)}\n\n"
 
     # Process images (but use GitHub instead of downloading)
     if image and 'src' in image.attrs:
         img_name = f"{game_name.lower().replace(' ', '_')}.jpg"
-        img_url = f"{GITHUB_IMAGES_URL}{img_name}"  # Reference GitHub image
+        img_url = f"{GITHUB_IMAGE_URL}{img_name}"  # Reference GitHub image
+        img_source = image['src']  # Original image source
 
-        # Add image reference to Markdown
-        game_info += f"![{game_name}]({img_url})\n"
+        # Add image and source to Markdown
+        game_info += f"![{game_name}]({img_url})\n\n"
+        game_info += f"<sub>Photo source: {img_source}</sub>\n\n"
 
     games.append(game_info)
 
 # Convert to Markdown
 markdown_content = "# Oldest Board Games\n\n" + "\n\n".join(games)
 
+# Clear README.md before writing
+readme_path = "README.md"
+if os.path.exists(readme_path):
+    open(readme_path, "w").close()  # Truncate file (delete content)
+
 # Save to README.md
-with open("README.md", "w", encoding="utf-8") as f:
+with open(readme_path, "w", encoding="utf-8") as f:
     f.write(markdown_content)
 
-print("Scraped content saved to README.md with GitHub image references.")
+print("README.md has been cleared and updated with new scraped content.")
