@@ -1,4 +1,4 @@
-### 8. Chess
+### [8. Chess](games_pages/8._chess.md)
 
 **Date Created:** c.600 AD  
  **Country of Origin:** India, possibly China  
@@ -16,7 +16,7 @@ Like many early games, the rules of Chess evolved as it spread throughout the wo
 
 ---
 
-### 7. Nine Men’s Morris
+### [7. Nine Men’s Morris](games_pages/7._nine_men’s_morris.md)
 
 **Date Created:** Unknown, possibly c.1400 BCE  
  **Country of Origin:** Unknown, possibly Ancient Egypt  
@@ -34,7 +34,7 @@ Nine Men’s Morris is still widely played today and its rules have not changed 
 
 ---
 
-### 6. Go
+### [6. Go](games_pages/6._go.md)
 
 **Date Created:** c.2000 BCE  
  **Country of Origin:** Ancient China  
@@ -52,7 +52,7 @@ The popularity of Go grew throughout other East Asian countries, especially Japa
 
 ---
 
-### 5. Royal Game of Ur
+### [5. Royal Game of Ur](games_pages/5._royal_game_of_ur.md)
 
 **Date Created:** c. 2600 – 2400 BCE  
  **Country of Origin:** Ancient Mesopotamia (modern-day Iraq)  
@@ -70,7 +70,7 @@ Historians were able to reconstruct the games rules based on a partial cuneiform
 
 ---
 
-### 4. Mehen
+### [4. Mehen](games_pages/4._mehen.md)
 
 **Date Created:** c.2700 BCE  
  **Country of Origin:** Ancient Egypt  
@@ -88,7 +88,7 @@ The pieces come in two types: small spheres similar to marbles and ivory pieces 
 
 ---
 
-### 3. Backgammon
+### [3. Backgammon](games_pages/3._backgammon.md)
 
 **Date Created:** c.3000 BCE  
  **Country of Origin:** Ancient Perisa (modern-day Iran)  
@@ -106,7 +106,7 @@ The game’s rules changed as it was played in different countries and the oldes
 
 ---
 
-### 2. Checkers
+### [2. Checkers](games_pages/2._checkers.md)
 
 **Date Created:** c.3000 BCE  
  **Country of Origin:** Ancient Mesopotamia (modern-day Iraq)  
@@ -126,7 +126,7 @@ The game has remained popular all around the world and the first World Champions
 
 ---
 
-### 1. Senet
+### [1. Senet](games_pages/1._senet.md)
 
 **Date Created:** c.3500 BCE  
  **Country of Origin:** Ancient Egypt  

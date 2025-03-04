@@ -8,10 +8,10 @@ import requests
 from bs4 import BeautifulSoup
 from markdownify import markdownify
 from duckduckgo_search import DDGS
-from duckduckgo_search import ddg_search
 
 url = 'https://www.oldest.org/entertainment/board-games/'
 output_folder = "games_pages"
+os.makedirs(output_folder, exist_ok=True)
 
 r = requests.get(url)
 soup = BeautifulSoup(r.text, 'html.parser')
@@ -39,61 +39,56 @@ with open(readme_path, "w", encoding="utf-8") as f:
 print("README.md saved successfully")
 print("Games found: ", len(games))
 
+
 def search_game_info(game_name):
-    # Create a query to search for game information
+    """Generates text about a board game using DuckDuckGo's chat function."""
     query = f"Tell me something about {game_name} board game"
+
+    try:
+        with DDGS() as ddgs:
+            search_response = ddgs.chat(query)  # Returns a text response, not a list
+        
+        # If no response is received, provide a default message
+        if not search_response:
+            search_response = "No information found."
     
-    # Perform the DuckDuckGo search using the chat() method
-    search_results = DDGS().chat(query)  # Make sure chat returns relevant data
-    
-    # Initialize the Markdown section
-    search_section = f"## Additional Information about {game_name}\n\n"
-    
-    # Loop through the search results and format them
-    for i, result in enumerate(search_results[:5]):  # Limit to 5 results
-        search_section += f"{i + 1}. [Link {i + 1}]({result['href']})\n"
-        search_section += f"    - **Title**: {result['title']}\n"
-        search_section += f"    - **Description**: {result['body']}\n\n"
+    except Exception as e:
+        search_response = f"Error retrieving information: {str(e)}"
+
+    # Format as Markdown
+    search_section = f"## Additional Information about {game_name}\n\n{search_response}\n"
     
     return search_section
 
 
-print("Tworzenie podstron...")
-for game in games:
-    game_filename = f"{game.lower().replace(' ', '_')}.md"  # Zmieniamy na odpowiednią nazwę pliku
-    game_filepath = os.path.join(output_folder, game_filename)
+# print("Tworzenie podstron...")
+# for game in games:
+#     game_filename = f"{game.lower().replace(' ', '_')}.md"
+#     game_filepath = os.path.join(output_folder, game_filename)
     
-    additional_info = search_game_info(game)
+#     additional_info = search_game_info(game)
 
-    # Zapisanie pliku
-    with open(game_filepath, 'w', encoding='utf-8') as f:
-        f.write(additional_info)
+#     # Save the file
+#     with open(game_filepath, 'w', encoding='utf-8') as f:
+#         f.write(additional_info)
 
-print("Podstrony zostały utworzone.")
-
-
+# print("Podstrony zostały utworzone.")
 
 
-# Zalinkowanie stron w README.md
-# Zaktualizowanie pliku README.md
-readme_path = "README.md"
+# Wczytaj zawartość README.md
+with open(readme_path, 'r', encoding='utf-8') as f:
+    readme_content = f.read()
 
-# Nagłówek
-readme_content = "# Lista Najstarszych Gier Planszowych\n\n"
-
-# Tworzenie linków do każdej gry
+# Zamiana nazw gier na linki
 for game in games:
-    # Zmieniamy nazwę gry na odpowiednią nazwę pliku
     game_filename = f"{game.lower().replace(' ', '_')}.md"
-    
-    # Sprawdzamy, czy plik dla tej gry istnieje
     game_url = os.path.join(output_folder, game_filename)
     
-    # Tworzymy link w formacie Markdown
-    readme_content += f"- [{game}]({game_url})\n"
+    # Podmieniamy nazwę gry na jej wersję z linkiem
+    readme_content = readme_content.replace(game, f"[{game}]({game_url})")
 
-# Zapisanie pliku README.md
+# Zapisanie zaktualizowanego pliku README.md
 with open(readme_path, 'w', encoding='utf-8') as f:
     f.write(readme_content)
 
-print("README.md zostało zaktualizowane.")
+print("README.md został zaktualizowany.")
